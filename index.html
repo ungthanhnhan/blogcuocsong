@@ -12,12 +12,14 @@
       padding: 0;
       background-color: #f4f4f9;
     }
+
     header {
       background-color: #333;
       color: white;
       padding: 10px 20px;
       text-align: center;
     }
+
     .container {
       max-width: 1000px;
       margin: 20px auto;
@@ -25,9 +27,11 @@
       background-color: white;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
     .form-group {
       margin-bottom: 15px;
     }
+
     input[type="text"], input[type="password"], textarea {
       width: 100%;
       padding: 10px;
@@ -35,6 +39,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
     button {
       padding: 10px 20px;
       background-color: #333;
@@ -43,20 +48,56 @@
       border-radius: 4px;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #555;
     }
+
     #editor {
       height: 300px;
     }
+
     #blog-posts {
       margin-top: 20px;
     }
+
     .post {
       padding: 10px;
       margin-bottom: 15px;
       background-color: #fafafa;
       border-left: 5px solid #333;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+        margin: 10px;
+      }
+
+      header {
+        padding: 8px 16px;
+      }
+
+      #editor {
+        height: 250px;
+      }
+    }
+
+    /* Version for Phones */
+    @media (max-width: 480px) {
+      .container {
+        padding: 5px;
+        margin: 5px;
+      }
+
+      header {
+        padding: 5px 10px;
+      }
+
+      #editor {
+        height: 200px;
+      }
     }
   </style>
 </head>
@@ -69,7 +110,7 @@
   <div class="container" id="login-container">
     <h2>Đăng nhập</h2>
     <div class="form-group">
-      <input type="text" id="loginEmail" placeholder="Email" required>
+      <input type="text" id="loginUsername" placeholder="Tên đăng nhập" required>
     </div>
     <div class="form-group">
       <input type="password" id="loginPassword" placeholder="Mật khẩu" required>
@@ -81,7 +122,7 @@
   <div class="container" id="register-container" style="display: none;">
     <h2>Đăng ký</h2>
     <div class="form-group">
-      <input type="text" id="registerEmail" placeholder="Email" required>
+      <input type="text" id="registerUsername" placeholder="Tên đăng nhập" required>
     </div>
     <div class="form-group">
       <input type="password" id="registerPassword" placeholder="Mật khẩu" required>
@@ -127,30 +168,41 @@
 
     // Đăng ký người dùng
     function register() {
-      const email = document.getElementById('registerEmail').value;
+      const username = document.getElementById('registerUsername').value.toLowerCase();
       const password = document.getElementById('registerPassword').value;
 
+      // Kiểm tra tên đăng nhập hợp lệ
+      const validUsername = /^[a-z0-9]+$/;
+      if (!validUsername.test(username)) {
+        alert('Tên đăng nhập chỉ được chứa chữ thường và số.');
+        return;
+      }
+
+      // Kiểm tra tên đăng nhập đã tồn tại chưa
+      if (localStorage.getItem(username)) {
+        alert('Tên đăng nhập đã tồn tại.');
+        return;
+      }
+
       // Lưu thông tin người dùng vào localStorage
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPassword', password);
+      localStorage.setItem(username, password);
       alert('Đăng ký thành công!');
       showLogin();
     }
 
     // Đăng nhập người dùng
     function login() {
-      const email = document.getElementById('loginEmail').value;
+      const username = document.getElementById('loginUsername').value.toLowerCase();
       const password = document.getElementById('loginPassword').value;
 
       // Kiểm tra thông tin đăng nhập
-      const storedEmail = localStorage.getItem('userEmail');
-      const storedPassword = localStorage.getItem('userPassword');
+      const storedPassword = localStorage.getItem(username);
 
-      if (email === storedEmail && password === storedPassword) {
+      if (storedPassword && storedPassword === password) {
         alert('Đăng nhập thành công!');
         showBlogPage();
       } else {
-        alert('Sai email hoặc mật khẩu');
+        alert('Sai tên đăng nhập hoặc mật khẩu');
       }
     }
 
