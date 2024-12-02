@@ -58,22 +58,57 @@
     .container {
       padding: 20px;
     }
-    .categories {
+    .categories-container {
       display: flex;
+      align-items: center;
       overflow-x: auto;
       margin-bottom: 20px;
+      position: relative;
+    }
+    .categories {
+      display: flex;
+      gap: 15px;
+      flex-wrap: nowrap;
+      margin: 0;
+      padding: 0;
     }
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px;
+      padding: 10px 15px;
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
+      white-space: nowrap; /* Ngăn không cho nội dung bị tràn ra ngoài */
+      overflow: hidden;
+      text-overflow: ellipsis; /* Hiển thị ba chấm nếu tên quá dài */
+      max-width: 150px; /* Giới hạn chiều rộng của category */
     }
     .category:hover {
       background-color: #0056b3;
     }
+
+    .categories-container .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .categories-container .left-arrow {
+      left: 0;
+    }
+
+    .categories-container .right-arrow {
+      right: 0;
+    }
+
     .posts {
       display: flex;
       flex-wrap: wrap;
@@ -187,6 +222,11 @@
       .post {
         width: 100%;
       }
+      .category {
+        width: auto;
+        max-width: 100px; /* Giảm bớt chiều dài của category trong phiên bản mobile */
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -206,15 +246,19 @@
 
   <div class="container">
     <!-- Categories -->
-    <div class="categories">
-      <div class="category">Sức khoẻ</div>
-      <div class="category">Giáo dục</div>
-      <div class="category">Y tế</div>
-      <div class="category">Tin tức</div>
-      <div class="category">Mẹo vặt</div>
-      <div class="category">Khoa học - Công nghệ</div>
-      <div class="category">Giải trí - Đố vui</div>
-      <div class="category">Tâm sự (Confession)</div>
+    <div class="categories-container">
+      <button class="arrow left-arrow">&#8592;</button>
+      <div class="categories">
+        <div class="category">Sức khoẻ</div>
+        <div class="category">Giáo dục</div>
+        <div class="category">Y tế</div>
+        <div class="category">Tin tức</div>
+        <div class="category">Mẹo vặt</div>
+        <div class="category">Khoa học - Công nghệ</div>
+        <div class="category">Giải trí - Đố vui</div>
+        <div class="category">Tâm sự (Confession)</div>
+      </div>
+      <button class="arrow right-arrow">&#8594;</button>
     </div>
 
     <!-- Posts -->
@@ -222,23 +266,23 @@
       <div class="post">
         <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
         <div class="post-content">
-          <h3>Tiêu đề bài viết 1</h3>
-          <p>Đây là đoạn tóm tắt đầu tiên của bài viết 1. Tóm tắt này sẽ hiển thị đủ các dòng trong một diện tích nhất định.</p>
+          <h3>Bài viết đầu tiên</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum urna libero, ut tincidunt arcu suscipit non.</p>
+          <button class="btn">Xem thêm</button>
         </div>
       </div>
-
       <div class="post">
         <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
         <div class="post-content">
-          <h3>Tiêu đề bài viết 2</h3>
-          <p>Đoạn tóm tắt của bài viết 2. Tóm tắt này sẽ ngắn hơn hoặc dài hơn tùy vào diện tích còn lại trong box.</p>
+          <h3>Bài viết thứ hai</h3>
+          <p>Curabitur maximus et libero ac malesuada. Nunc aliquet neque non metus ultrices, ac cursus felis vulputate.</p>
+          <button class="btn">Xem thêm</button>
         </div>
       </div>
     </div>
-    
   </div>
 
-  <!-- Modal Đăng nhập -->
+  <!-- Modals for login and register -->
   <div id="login-modal" class="modal">
     <div class="modal-content">
       <span class="close" id="close-login-modal">&times;</span>
@@ -249,7 +293,6 @@
     </div>
   </div>
 
-  <!-- Modal Đăng ký -->
   <div id="register-modal" class="modal">
     <div class="modal-content">
       <span class="close" id="close-register-modal">&times;</span>
@@ -271,6 +314,9 @@
     const submitRegister = document.getElementById('submit-register');
     const logoutBtn = document.getElementById('logout-btn');
     const profileBtn = document.getElementById('profile-btn');
+    const leftArrow = document.querySelector('.left-arrow');
+    const rightArrow = document.querySelector('.right-arrow');
+    const categories = document.querySelector('.categories');
 
     const users = [
       { username: "admin", password: "Andy@bi1997" }
@@ -283,7 +329,7 @@
         document.getElementById('register-btn').style.display = 'none';
         document.getElementById('logout-btn').style.display = 'inline-block';
         document.getElementById('profile-btn').style.display = 'inline-block';
-        document.getElementById('profile-btn').innerText = loggedInUser;
+        document.getElementById('profile-btn').innerText = loggedInUser.length > 10 ? loggedInUser.slice(0, 10) + '...' : loggedInUser;
       } else {
         document.getElementById('login-btn').style.display = 'inline-block';
         document.getElementById('register-btn').style.display = 'inline-block';
@@ -342,6 +388,14 @@
       localStorage.removeItem('loggedInUser');
       loadLoginStatus();
       alert("Đăng xuất thành công");
+    };
+
+    leftArrow.onclick = function() {
+      categories.scrollBy(-150, 0);
+    };
+
+    rightArrow.onclick = function() {
+      categories.scrollBy(150, 0);
     };
   </script>
 </body>
