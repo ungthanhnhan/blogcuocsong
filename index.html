@@ -13,7 +13,7 @@
       background-color: #f4f4f9;
     }
     header {
-      background-color: #00bcd4; /* Màu xanh da trời */
+      background-color: #00bcd4;
       color: white;
       padding: 15px 0;
       display: flex;
@@ -26,9 +26,9 @@
       font-size: 2.5rem;
       font-weight: bold;
       font-style: italic;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng shadow */
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
       text-transform: capitalize;
-      color: white; /* Màu trắng cho logo */
+      color: white;
       letter-spacing: 2px;
       padding-left: 15px;
     }
@@ -70,8 +70,8 @@
       flex-wrap: nowrap;
       margin: 0;
       padding: 0;
-      overflow-x: hidden; /* Không cho phép vuốt */
-      transition: transform 0.3s ease; /* Thêm hiệu ứng khi di chuyển */
+      overflow-x: hidden;
+      transition: transform 0.3s ease;
     }
     .category {
       background-color: #007bff;
@@ -80,10 +80,10 @@
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
-      white-space: nowrap; /* Ngăn không cho nội dung bị tràn ra ngoài */
+      white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis; /* Hiển thị ba chấm nếu tên quá dài */
-      max-width: 150px; /* Giới hạn chiều rộng của category */
+      text-overflow: ellipsis;
+      max-width: 150px;
     }
     .category:hover {
       background-color: #0056b3;
@@ -100,7 +100,7 @@
       border: none;
       cursor: pointer;
       padding: 10px;
-      border-radius: 50%;
+      border-radius: 50%; /* Đổi hình bầu dục thành tròn */
     }
 
     .categories-container .left-arrow {
@@ -115,7 +115,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
-      background-color: white; /* Màu nền trắng cho bài viết */
+      background-color: white;
       padding: 10px;
     }
     .post {
@@ -208,6 +208,7 @@
       cursor: pointer;
     }
 
+    /* Media Queries */
     @media (max-width: 768px) {
       header h1 {
         font-size: 1.8rem;
@@ -225,12 +226,18 @@
         width: 100%;
       }
       .category {
-        width: auto;
-        max-width: 100px; /* Giảm bớt chiều dài của category trong phiên bản mobile */
+        max-width: 100px; 
         font-size: 0.9rem;
+        text-overflow: ellipsis; /* Hiển thị ba chấm khi tên quá dài */
       }
       .categories {
         gap: 10px;
+      }
+      .categories-container {
+        overflow-x: auto; /* Đảm bảo các category không bị mất */
+      }
+      .categories-container .arrow {
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -260,145 +267,15 @@
         <div class="category">Tin tức</div>
         <div class="category">Mẹo vặt</div>
         <div class="category">Tâm sự</div>
+        <div class="category">Khoa học - Công nghệ</div>
+        <div class="category">Giải trí - Đố vui</div>
       </div>
       <button class="arrow right-arrow">&#8594;</button>
     </div>
-
-    <!-- Posts -->
     <div class="posts">
-      <div class="post">
-        <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
-        <div class="post-content">
-          <h3>Bài viết đầu tiên</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum urna libero, ut tincidunt arcu suscipit non.</p>
-          <button class="btn">Xem thêm</button>
-        </div>
-      </div>
-      <div class="post">
-        <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
-        <div class="post-content">
-          <h3>Bài viết thứ hai</h3>
-          <p>Curabitur maximus et libero ac malesuada. Nunc aliquet neque non metus ultrices, ac cursus felis vulputate.</p>
-          <button class="btn">Xem thêm</button>
-        </div>
-      </div>
+      <!-- Các bài viết ở đây -->
     </div>
   </div>
 
-  <!-- Modals for login and register -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="close-login-modal">&times;</span>
-      <h2>Đăng nhập</h2>
-      <input type="text" id="username" placeholder="Tên đăng nhập">
-      <input type="password" id="password" placeholder="Mật khẩu">
-      <button id="submit-login">Đăng nhập</button>
-    </div>
-  </div>
-
-  <div id="register-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="close-register-modal">&times;</span>
-      <h2>Đăng ký</h2>
-      <input type="text" id="new-username" placeholder="Tên đăng nhập">
-      <input type="password" id="new-password" placeholder="Mật khẩu">
-      <button id="submit-register">Đăng ký</button>
-    </div>
-  </div>
-
-  <script>
-    const loginModal = document.getElementById('login-modal');
-    const registerModal = document.getElementById('register-modal');
-    const closeLoginModal = document.getElementById('close-login-modal');
-    const closeRegisterModal = document.getElementById('close-register-modal');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const submitLogin = document.getElementById('submit-login');
-    const submitRegister = document.getElementById('submit-register');
-    const logoutBtn = document.getElementById('logout-btn');
-    const profileBtn = document.getElementById('profile-btn');
-    const leftArrow = document.querySelector('.left-arrow');
-    const rightArrow = document.querySelector('.right-arrow');
-    const categories = document.querySelector('.categories');
-    const users = [
-      { username: "admin", password: "Andy@bi1997" }
-    ];
-
-    function loadLoginStatus() {
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      if (loggedInUser) {
-        document.getElementById('login-btn').style.display = 'none';
-        document.getElementById('register-btn').style.display = 'none';
-        document.getElementById('logout-btn').style.display = 'inline-block';
-        document.getElementById('profile-btn').style.display = 'inline-block';
-        document.getElementById('profile-btn').innerText = loggedInUser;
-      } else {
-        document.getElementById('login-btn').style.display = 'inline-block';
-        document.getElementById('register-btn').style.display = 'inline-block';
-        document.getElementById('logout-btn').style.display = 'none';
-        document.getElementById('profile-btn').style.display = 'none';
-      }
-    }
-
-    loadLoginStatus();
-
-    loginBtn.onclick = function() {
-      loginModal.style.display = "block";
-    };
-
-    closeLoginModal.onclick = function() {
-      loginModal.style.display = "none";
-    };
-
-    submitLogin.onclick = function() {
-      const username = document.getElementById('username').value.toLowerCase();
-      const password = document.getElementById('password').value;
-      const user = users.find(user => user.username.toLowerCase() === username && user.password === password);
-
-      if (user) {
-        loginModal.style.display = "none";
-        alert("Đăng nhập thành công");
-        localStorage.setItem('loggedInUser', user.username);
-        loadLoginStatus();
-      } else {
-        alert("Sai tên đăng nhập hoặc mật khẩu");
-      }
-    };
-
-    registerBtn.onclick = function() {
-      registerModal.style.display = "block";
-    };
-
-    closeRegisterModal.onclick = function() {
-      registerModal.style.display = "none";
-    };
-
-    submitRegister.onclick = function() {
-      const newUsername = document.getElementById('new-username').value.toLowerCase();
-      const newPassword = document.getElementById('new-password').value;
-
-      if (users.some(user => user.username.toLowerCase() === newUsername)) {
-        alert("Tên đăng nhập đã tồn tại");
-      } else {
-        users.push({ username: newUsername, password: newPassword });
-        alert("Đăng ký thành công");
-        registerModal.style.display = "none";
-      }
-    };
-
-    logoutBtn.onclick = function() {
-      localStorage.removeItem('loggedInUser');
-      loadLoginStatus();
-      alert("Đăng xuất thành công");
-    };
-
-    leftArrow.onclick = function() {
-      categories.scrollBy(-150, 0);
-    };
-
-    rightArrow.onclick = function() {
-      categories.scrollBy(150, 0);
-    };
-  </script>
 </body>
 </html>
