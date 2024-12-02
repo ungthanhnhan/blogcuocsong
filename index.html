@@ -76,14 +76,14 @@
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px 20px; /* Tăng chiều rộng của category */
+      padding: 10px 20px;
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-width: 150px; /* Đảm bảo đủ chỗ để hiển thị tên */
+      min-width: 160px; /* Điều chỉnh kích thước đề mục */
     }
     .category:hover {
       background-color: #0056b3;
@@ -226,10 +226,10 @@
         width: 100%;
       }
       .category {
-        max-width: none; /* Đảm bảo hiển thị hết tên đề mục */
-        font-size: 1rem; /* Cân chỉnh font size */
-        text-overflow: unset; /* Không dùng dấu ba chấm */
-        white-space: normal; /* Cho phép dòng dài hơn */
+        max-width: none;
+        font-size: 1rem;
+        text-overflow: unset;
+        white-space: normal;
       }
       .categories {
         gap: 15px;
@@ -285,123 +285,125 @@
     </div>
   </div>
 
-  <!-- Modal Đăng nhập/Đăng ký -->
-  <div class="modal" id="login-modal">
+  <!-- Modal Login/Register -->
+  <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Đăng nhập</h2>
-      <input type="text" id="username" placeholder="Tên người dùng">
-      <input type="password" id="password" placeholder="Mật khẩu">
-      <button id="login-submit">Đăng nhập</button>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Tên tài khoản" required>
+        <input type="password" id="password" placeholder="Mật khẩu" required>
+        <button type="submit">Đăng nhập</button>
+      </form>
+      <p>Bạn chưa có tài khoản? <a href="#" id="register-link">Đăng ký</a></p>
     </div>
   </div>
 
-  <div class="modal" id="register-modal">
+  <div id="registerModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Đăng ký</h2>
-      <input type="text" id="register-username" placeholder="Tên người dùng">
-      <input type="password" id="register-password" placeholder="Mật khẩu">
-      <button id="register-submit">Đăng ký</button>
+      <form id="registerForm">
+        <input type="text" id="register-username" placeholder="Tên tài khoản" required>
+        <input type="password" id="register-password" placeholder="Mật khẩu" required>
+        <button type="submit">Đăng ký</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const categories = document.querySelector('.categories');
-    const leftArrow = document.querySelector('.left-arrow');
-    const rightArrow = document.querySelector('.right-arrow');
-
-    leftArrow.addEventListener('click', () => {
-      categories.scrollLeft -= 100;
-    });
-
-    rightArrow.addEventListener('click', () => {
-      categories.scrollLeft += 100;
-    });
-
+    // Modal Logic
     const loginBtn = document.getElementById('login-btn');
     const registerBtn = document.getElementById('register-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const profileBtn = document.getElementById('profile-btn');
-    const loginModal = document.getElementById('login-modal');
-    const registerModal = document.getElementById('register-modal');
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
     const closeBtns = document.querySelectorAll('.close');
-    const loginSubmit = document.getElementById('login-submit');
-    const registerSubmit = document.getElementById('register-submit');
+    const registerLink = document.getElementById('register-link');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const registerUsernameInput = document.getElementById('register-username');
     const registerPasswordInput = document.getElementById('register-password');
+    const loginInfo = document.querySelector('.login-info');
 
-    const users = [];
+    let users = [
+      { username: 'admin', password: '1234' },
+      { username: 'user', password: 'abcd' }
+    ];
 
-    loginBtn.addEventListener('click', () => {
-      loginModal.style.display = 'block';
-    });
+    // Show modal
+    loginBtn.onclick = () => loginModal.style.display = 'block';
+    registerBtn.onclick = () => registerModal.style.display = 'block';
 
-    registerBtn.addEventListener('click', () => {
-      registerModal.style.display = 'block';
-    });
-
+    // Close modal
     closeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.onclick = () => {
         loginModal.style.display = 'none';
         registerModal.style.display = 'none';
-      });
+      };
     });
 
-    loginSubmit.addEventListener('click', () => {
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value.trim();
+    // Switch to register modal
+    registerLink.onclick = () => {
+      loginModal.style.display = 'none';
+      registerModal.style.display = 'block';
+    };
 
-      if (username === 'admin' && password === '12345') {
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('username', username);
-        updateUI();
-        loginModal.style.display = 'none';
+    // Login form submission
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+      const user = users.find(u => u.username === username);
+
+      if (user) {
+        if (user.password === password) {
+          alert('Đăng nhập thành công');
+          loginModal.style.display = 'none';
+          loginInfo.style.display = 'none';
+          profileBtn.style.display = 'inline';
+          logoutBtn.style.display = 'inline';
+        } else {
+          alert('Sai mật khẩu');
+        }
       } else {
-        alert('Sai tên đăng nhập hoặc mật khẩu');
+        alert('Tài khoản chưa tồn tại, hãy đăng ký');
       }
-    });
+    };
 
-    registerSubmit.addEventListener('click', () => {
-      const username = registerUsernameInput.value.trim();
-      const password = registerPasswordInput.value.trim();
+    // Register form submission
+    registerForm.onsubmit = (e) => {
+      e.preventDefault();
+      const username = registerUsernameInput.value;
+      const password = registerPasswordInput.value;
 
-      if (users.some(user => user.username === username)) {
-        alert('Tài khoản này đã tồn tại');
+      if (users.find(u => u.username === username)) {
+        alert('Tài khoản đã tồn tại');
       } else {
         users.push({ username, password });
         alert('Đăng ký thành công');
         registerModal.style.display = 'none';
+        loginModal.style.display = 'block';
       }
-    });
+    };
 
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('loggedIn');
-      localStorage.removeItem('username');
-      updateUI();
-    });
+    // Logout
+    logoutBtn.onclick = () => {
+      loginInfo.style.display = 'flex';
+      profileBtn.style.display = 'none';
+      logoutBtn.style.display = 'none';
+    };
 
-    function updateUI() {
-      const loggedIn = localStorage.getItem('loggedIn');
-      const username = localStorage.getItem('username');
-      
-      if (loggedIn) {
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
-        profileBtn.style.display = 'block';
-        profileBtn.textContent = username;
-      } else {
-        loginBtn.style.display = 'block';
-        registerBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
-        profileBtn.style.display = 'none';
-      }
-    }
+    // Arrow movement for categories
+    const leftArrow = document.querySelector('.left-arrow');
+    const rightArrow = document.querySelector('.right-arrow');
+    const categories = document.querySelector('.categories');
 
-    updateUI();
+    leftArrow.onclick = () => categories.scrollBy({ left: -200, behavior: 'smooth' });
+    rightArrow.onclick = () => categories.scrollBy({ left: 200, behavior: 'smooth' });
   </script>
 </body>
 </html>
