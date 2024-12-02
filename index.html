@@ -76,14 +76,14 @@
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px 15px;
+      padding: 10px 20px; /* Tăng chiều rộng của category */
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 150px;
+      min-width: 150px; /* Đảm bảo đủ chỗ để hiển thị tên */
     }
     .category:hover {
       background-color: #0056b3;
@@ -226,18 +226,19 @@
         width: 100%;
       }
       .category {
-        max-width: 100px; 
-        font-size: 0.9rem;
-        text-overflow: ellipsis; /* Hiển thị ba chấm khi tên quá dài */
+        max-width: none; /* Đảm bảo hiển thị hết tên đề mục */
+        font-size: 1rem; /* Cân chỉnh font size */
+        text-overflow: unset; /* Không dùng dấu ba chấm */
+        white-space: normal; /* Cho phép dòng dài hơn */
       }
       .categories {
-        gap: 10px;
+        gap: 15px;
       }
       .categories-container {
-        overflow-x: auto; /* Đảm bảo các category không bị mất */
+        overflow-x: auto;
       }
       .categories-container .arrow {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
       }
     }
   </style>
@@ -265,15 +266,22 @@
         <div class="category">Giáo dục</div>
         <div class="category">Y tế</div>
         <div class="category">Tin tức</div>
-        <div class="category">Mẹo vặt</div>
-        <div class="category">Tâm sự</div>
-        <div class="category">Khoa học - Công nghệ</div>
-        <div class="category">Giải trí - Đố vui</div>
+        <div class="category">Giải trí</div>
+        <div class="category">Thời trang</div>
       </div>
       <button class="arrow right-arrow">&#8594;</button>
     </div>
+    <!-- Posts -->
     <div class="posts">
-      <!-- Các bài viết ở đây -->
+      <div class="post">
+        <img src="https://via.placeholder.com/640x360" alt="Post 1">
+        <div class="post-content">
+          <h3>Post 1</h3>
+          <p>Đây là mô tả bài viết số 1</p>
+          <span class="btn">Xem thêm</span>
+        </div>
+      </div>
+      <!-- Add more posts here -->
     </div>
   </div>
 
@@ -395,6 +403,5 @@
 
     updateUI();
   </script>
-
 </body>
 </html>
