@@ -71,6 +71,7 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden; /* Không cho phép vuốt */
+      transition: transform 0.3s ease; /* Thêm hiệu ứng khi di chuyển */
     }
     .category {
       background-color: #007bff;
@@ -88,6 +89,7 @@
       background-color: #0056b3;
     }
 
+    /* Mũi tên di chuyển */
     .categories-container .arrow {
       position: absolute;
       top: 50%;
@@ -254,9 +256,7 @@
         <div class="category">Y tế</div>
         <div class="category">Tin tức</div>
         <div class="category">Mẹo vặt</div>
-        <div class="category">Khoa học - Công nghệ</div>
-        <div class="category">Giải trí - Đố vui</div>
-        <div class="category">Tâm sự (Confession)</div>
+        <div class="category">Tâm sự</div>
       </div>
       <button class="arrow right-arrow">&#8594;</button>
     </div>
