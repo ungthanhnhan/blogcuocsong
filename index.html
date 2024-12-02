@@ -76,14 +76,14 @@
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px 20px;
+      padding: 10px 20px; /* Tăng chiều rộng của category */
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-width: 160px; /* Điều chỉnh kích thước đề mục */
+      min-width: 150px; /* Đảm bảo đủ chỗ để hiển thị tên */
     }
     .category:hover {
       background-color: #0056b3;
@@ -226,10 +226,10 @@
         width: 100%;
       }
       .category {
-        max-width: none;
-        font-size: 1rem;
-        text-overflow: unset;
-        white-space: normal;
+        max-width: none; /* Đảm bảo hiển thị hết tên đề mục */
+        font-size: 1rem; /* Cân chỉnh font size */
+        text-overflow: unset; /* Không dùng dấu ba chấm */
+        white-space: normal; /* Cho phép dòng dài hơn */
       }
       .categories {
         gap: 15px;
@@ -285,125 +285,96 @@
     </div>
   </div>
 
-  <!-- Modal Login/Register -->
-  <div id="loginModal" class="modal">
+  <!-- Modal Đăng nhập/Đăng ký -->
+  <div class="modal" id="login-modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Đăng nhập</h2>
-      <form id="loginForm">
-        <input type="text" id="username" placeholder="Tên tài khoản" required>
-        <input type="password" id="password" placeholder="Mật khẩu" required>
-        <button type="submit">Đăng nhập</button>
-      </form>
-      <p>Bạn chưa có tài khoản? <a href="#" id="register-link">Đăng ký</a></p>
+      <input type="text" id="username" placeholder="Tên người dùng">
+      <input type="password" id="password" placeholder="Mật khẩu">
+      <button id="login-submit">Đăng nhập</button>
     </div>
   </div>
 
-  <div id="registerModal" class="modal">
+  <div class="modal" id="register-modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Đăng ký</h2>
-      <form id="registerForm">
-        <input type="text" id="register-username" placeholder="Tên tài khoản" required>
-        <input type="password" id="register-password" placeholder="Mật khẩu" required>
-        <button type="submit">Đăng ký</button>
-      </form>
+      <input type="text" id="new-username" placeholder="Tên người dùng">
+      <input type="password" id="new-password" placeholder="Mật khẩu">
+      <button id="register-submit">Đăng ký</button>
     </div>
   </div>
 
   <script>
-    // Modal Logic
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const profileBtn = document.getElementById('profile-btn');
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
-    const closeBtns = document.querySelectorAll('.close');
-    const registerLink = document.getElementById('register-link');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const registerUsernameInput = document.getElementById('register-username');
-    const registerPasswordInput = document.getElementById('register-password');
-    const loginInfo = document.querySelector('.login-info');
-
-    let users = [
-      { username: 'admin', password: '1234' },
-      { username: 'user', password: 'abcd' }
-    ];
-
-    // Show modal
-    loginBtn.onclick = () => loginModal.style.display = 'block';
-    registerBtn.onclick = () => registerModal.style.display = 'block';
-
-    // Close modal
-    closeBtns.forEach(btn => {
-      btn.onclick = () => {
-        loginModal.style.display = 'none';
-        registerModal.style.display = 'none';
-      };
+    // Lưu trữ trạng thái đăng nhập bằng localStorage
+    document.getElementById("login-btn").addEventListener("click", function() {
+      document.getElementById("login-modal").style.display = "block";
     });
 
-    // Switch to register modal
-    registerLink.onclick = () => {
-      loginModal.style.display = 'none';
-      registerModal.style.display = 'block';
-    };
+    document.getElementById("register-btn").addEventListener("click", function() {
+      document.getElementById("register-modal").style.display = "block";
+    });
 
-    // Login form submission
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const username = usernameInput.value;
-      const password = passwordInput.value;
-      const user = users.find(u => u.username === username);
+    document.getElementById("logout-btn").addEventListener("click", function() {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("username");
+      updateLoginState();
+    });
 
-      if (user) {
-        if (user.password === password) {
-          alert('Đăng nhập thành công');
-          loginModal.style.display = 'none';
-          loginInfo.style.display = 'none';
-          profileBtn.style.display = 'inline';
-          logoutBtn.style.display = 'inline';
-        } else {
-          alert('Sai mật khẩu');
-        }
+    document.getElementById("login-submit").addEventListener("click", function() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "admin" && password === "admin") {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", username);
+        updateLoginState();
+        document.getElementById("login-modal").style.display = "none";
       } else {
-        alert('Tài khoản chưa tồn tại, hãy đăng ký');
+        alert("Thông tin đăng nhập không đúng");
       }
-    };
+    });
 
-    // Register form submission
-    registerForm.onsubmit = (e) => {
-      e.preventDefault();
-      const username = registerUsernameInput.value;
-      const password = registerPasswordInput.value;
+    document.getElementById("register-submit").addEventListener("click", function() {
+      const newUsername = document.getElementById("new-username").value;
+      const newPassword = document.getElementById("new-password").value;
+      
+      // Đây là nơi bạn xử lý logic đăng ký người dùng mới.
+      alert("Đăng ký thành công");
+      document.getElementById("register-modal").style.display = "none";
+    });
 
-      if (users.find(u => u.username === username)) {
-        alert('Tài khoản đã tồn tại');
+    document.querySelectorAll(".close").forEach(span => {
+      span.addEventListener("click", function() {
+        document.getElementById("login-modal").style.display = "none";
+        document.getElementById("register-modal").style.display = "none";
+      });
+    });
+
+    function updateLoginState() {
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      const username = localStorage.getItem("username");
+
+      if (isLoggedIn === "true") {
+        document.getElementById("login-btn").style.display = "none";
+        document.getElementById("register-btn").style.display = "none";
+        document.getElementById("logout-btn").style.display = "inline-block";
+        document.getElementById("profile-btn").style.display = "inline-block";
       } else {
-        users.push({ username, password });
-        alert('Đăng ký thành công');
-        registerModal.style.display = 'none';
-        loginModal.style.display = 'block';
+        document.getElementById("login-btn").style.display = "inline-block";
+        document.getElementById("register-btn").style.display = "inline-block";
+        document.getElementById("logout-btn").style.display = "none";
+        document.getElementById("profile-btn").style.display = "none";
       }
+    }
+
+    // Kiểm tra trạng thái đăng nhập khi tải lại trang
+    window.onload = function() {
+      updateLoginState();
     };
 
-    // Logout
-    logoutBtn.onclick = () => {
-      loginInfo.style.display = 'flex';
-      profileBtn.style.display = 'none';
-      logoutBtn.style.display = 'none';
-    };
-
-    // Arrow movement for categories
-    const leftArrow = document.querySelector('.left-arrow');
-    const rightArrow = document.querySelector('.right-arrow');
-    const categories = document.querySelector('.categories');
-
-    leftArrow.onclick = () => categories.scrollBy({ left: -200, behavior: 'smooth' });
-    rightArrow.onclick = () => categories.scrollBy({ left: 200, behavior: 'smooth' });
   </script>
+
 </body>
 </html>
