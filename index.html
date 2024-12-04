@@ -28,7 +28,7 @@
       font-style: italic;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng shadow */
       text-transform: capitalize;
-      color: #ff5722; /* Màu cam cho logo */
+      color: white; /* Màu trắng cho logo */
       letter-spacing: 2px;
       padding-left: 15px;
     }
@@ -197,6 +197,7 @@
     <nav>
       <div class="login-info">
         <a href="#" id="login-btn">Đăng nhập</a>
+        <a href="#" id="register-btn">Đăng ký</a>
         <a href="#" id="logout-btn" style="display: none;">Đăng xuất</a>
         <a href="#" id="profile-btn" style="display: none;">admin</a>
       </div>
@@ -260,7 +261,6 @@
   </div>
 
   <script>
-    // Modal Functions
     const loginModal = document.getElementById('login-modal');
     const registerModal = document.getElementById('register-modal');
     const closeLoginModal = document.getElementById('close-login-modal');
@@ -269,27 +269,24 @@
     const registerBtn = document.getElementById('register-btn');
     const submitLogin = document.getElementById('submit-login');
     const submitRegister = document.getElementById('submit-register');
-    
+
     const users = [
-      { username: "admin", password: "Andy@bi1997" } // Đã có tài khoản admin
+      { username: "admin", password: "Andy@bi1997" }
     ];
 
-    // Khi bấm vào "Đăng nhập"
     loginBtn.onclick = function() {
       loginModal.style.display = "block";
     };
 
-    // Đóng modal đăng nhập
     closeLoginModal.onclick = function() {
       loginModal.style.display = "none";
     };
 
-    // Khi bấm "Đăng nhập" trong modal
     submitLogin.onclick = function() {
-      const username = document.getElementById('username').value;
+      const username = document.getElementById('username').value.toLowerCase(); // Không phân biệt viết hoa
       const password = document.getElementById('password').value;
-      const user = users.find(user => user.username === username && user.password === password);
-      
+      const user = users.find(user => user.username.toLowerCase() === username && user.password === password);
+
       if (user) {
         loginModal.style.display = "none";
         alert("Đăng nhập thành công");
@@ -301,22 +298,19 @@
       }
     };
 
-    // Modal Đăng ký
-    document.getElementById('register-btn').onclick = function() {
+    registerBtn.onclick = function() {
       registerModal.style.display = "block";
     };
 
-    // Đóng modal đăng ký
     closeRegisterModal.onclick = function() {
       registerModal.style.display = "none";
     };
 
-    // Khi bấm "Đăng ký"
     submitRegister.onclick = function() {
-      const newUsername = document.getElementById('new-username').value;
+      const newUsername = document.getElementById('new-username').value.toLowerCase(); // Không phân biệt viết hoa
       const newPassword = document.getElementById('new-password').value;
-      
-      if (users.some(user => user.username === newUsername)) {
+
+      if (users.some(user => user.username.toLowerCase() === newUsername)) {
         alert("Tên đăng nhập đã tồn tại");
       } else {
         users.push({ username: newUsername, password: newPassword });
@@ -325,14 +319,12 @@
       }
     };
 
-    // Đăng xuất
     document.getElementById('logout-btn').onclick = function() {
       document.getElementById('profile-btn').style.display = "none";
       document.getElementById('logout-btn').style.display = "none";
       document.getElementById('login-btn').style.display = "inline-block";
       alert("Đăng xuất thành công");
     };
-
   </script>
 </body>
 </html>
