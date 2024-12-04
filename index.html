@@ -19,6 +19,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
     header h1 {
       margin: 0;
@@ -31,27 +32,28 @@
       letter-spacing: 2px;
       padding-left: 15px;
     }
-    header h1::before {
-      content: '» '; /* Thêm dấu trước logo để làm nổi bật */
-      font-size: 2rem;
-      color: #ff5722;
-    }
-    header h1::after {
-      content: ' «'; /* Thêm dấu sau logo */
-      font-size: 2rem;
-      color: #ff5722;
-    }
     nav {
       display: flex;
       justify-content: flex-end;
       margin: 10px;
     }
-    nav a {
-      color: white;
+    .login-info, .register-info {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .login-info a, .register-info a {
+      color: black;
       text-decoration: none;
-      margin: 0 10px;
       font-weight: bold;
-      text-transform: uppercase;
+      margin-left: 10px;
+      background-color: white;
+      padding: 8px 15px;
+      border-radius: 25px;
+      transition: background-color 0.3s;
+    }
+    .login-info a:hover, .register-info a:hover {
+      background-color: #e0e0e0;
     }
     .container {
       padding: 20px;
@@ -116,23 +118,72 @@
       color: #007bff;
       cursor: pointer;
     }
-    .login-info {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
+
+    /* Modal (Pop-up) Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
     }
-    .login-info a {
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 8px;
+    }
+    .modal input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .modal button {
+      background-color: #007bff;
       color: white;
-      text-decoration: none;
-      font-weight: bold;
-      margin-left: 10px;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
     }
+    .modal button:hover {
+      background-color: #0056b3;
+    }
+    .modal .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .modal .close:hover,
+    .modal .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
       .post {
         width: calc(50% - 20px);
       }
     }
+
     @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
       .post {
         width: 100%;
       }
@@ -153,7 +204,6 @@
   </header>
 
   <div class="container">
-
     <!-- Categories -->
     <div class="categories">
       <div class="category">Sức khoẻ</div>
@@ -187,39 +237,102 @@
     
   </div>
 
+  <!-- Modal Đăng nhập -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-login-modal">&times;</span>
+      <h2>Đăng nhập</h2>
+      <input type="text" id="username" placeholder="Tên đăng nhập">
+      <input type="password" id="password" placeholder="Mật khẩu">
+      <button id="submit-login">Đăng nhập</button>
+    </div>
+  </div>
+
+  <!-- Modal Đăng ký -->
+  <div id="register-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-register-modal">&times;</span>
+      <h2>Đăng ký</h2>
+      <input type="text" id="new-username" placeholder="Tên đăng nhập">
+      <input type="password" id="new-password" placeholder="Mật khẩu">
+      <button id="submit-register">Đăng ký</button>
+    </div>
+  </div>
+
   <script>
-    // Giả lập người dùng đăng nhập
-    let loggedIn = false;
-    let currentUser = "admin";
+    // Modal Functions
+    const loginModal = document.getElementById('login-modal');
+    const registerModal = document.getElementById('register-modal');
+    const closeLoginModal = document.getElementById('close-login-modal');
+    const closeRegisterModal = document.getElementById('close-register-modal');
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const submitLogin = document.getElementById('submit-login');
+    const submitRegister = document.getElementById('submit-register');
+    
+    const users = [
+      { username: "admin", password: "Andy@bi1997" } // Đã có tài khoản admin
+    ];
 
-    // Cập nhật giao diện dựa trên trạng thái đăng nhập
-    function updateLoginUI() {
-      if (loggedIn) {
-        document.getElementById("login-btn").style.display = "none";
-        document.getElementById("logout-btn").style.display = "inline";
-        document.getElementById("profile-btn").style.display = "inline";
+    // Khi bấm vào "Đăng nhập"
+    loginBtn.onclick = function() {
+      loginModal.style.display = "block";
+    };
+
+    // Đóng modal đăng nhập
+    closeLoginModal.onclick = function() {
+      loginModal.style.display = "none";
+    };
+
+    // Khi bấm "Đăng nhập" trong modal
+    submitLogin.onclick = function() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const user = users.find(user => user.username === username && user.password === password);
+      
+      if (user) {
+        loginModal.style.display = "none";
+        alert("Đăng nhập thành công");
+        document.getElementById('profile-btn').style.display = "inline-block";
+        document.getElementById('logout-btn').style.display = "inline-block";
+        document.getElementById('login-btn').style.display = "none";
       } else {
-        document.getElementById("login-btn").style.display = "inline";
-        document.getElementById("logout-btn").style.display = "none";
-        document.getElementById("profile-btn").style.display = "none";
+        alert("Sai tên đăng nhập hoặc mật khẩu");
       }
-    }
+    };
 
-    // Xử lý đăng nhập
-    document.getElementById("login-btn").addEventListener("click", function() {
-      loggedIn = true;
-      updateLoginUI();
-    });
+    // Modal Đăng ký
+    document.getElementById('register-btn').onclick = function() {
+      registerModal.style.display = "block";
+    };
 
-    // Xử lý đăng xuất
-    document.getElementById("logout-btn").addEventListener("click", function() {
-      loggedIn = false;
-      updateLoginUI();
-    });
+    // Đóng modal đăng ký
+    closeRegisterModal.onclick = function() {
+      registerModal.style.display = "none";
+    };
 
-    // Cập nhật giao diện khi trang tải
-    updateLoginUI();
+    // Khi bấm "Đăng ký"
+    submitRegister.onclick = function() {
+      const newUsername = document.getElementById('new-username').value;
+      const newPassword = document.getElementById('new-password').value;
+      
+      if (users.some(user => user.username === newUsername)) {
+        alert("Tên đăng nhập đã tồn tại");
+      } else {
+        users.push({ username: newUsername, password: newPassword });
+        alert("Đăng ký thành công");
+        registerModal.style.display = "none";
+      }
+    };
+
+    // Đăng xuất
+    document.getElementById('logout-btn').onclick = function() {
+      document.getElementById('profile-btn').style.display = "none";
+      document.getElementById('logout-btn').style.display = "none";
+      document.getElementById('login-btn').style.display = "inline-block";
+      alert("Đăng xuất thành công");
+    };
+
   </script>
-
 </body>
 </html>
