@@ -309,6 +309,7 @@
   </div>
 
   <script>
+    // Khai báo danh sách người dùng (lưu trữ thông tin người dùng đã đăng ký)
     let users = JSON.parse(localStorage.getItem('users')) || [];
 
     const loginBtn = document.getElementById('login-btn');
@@ -318,6 +319,7 @@
     const loginModal = document.getElementById('login-modal');
     const registerModal = document.getElementById('register-modal');
     const closeButtons = document.querySelectorAll('.close');
+
     let currentUser = localStorage.getItem('currentUser');
 
     if (currentUser) {
@@ -350,38 +352,51 @@
       });
     });
 
+    // Đăng ký người dùng mới
+    document.getElementById('register-submit').addEventListener('click', () => {
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+      
+      if (!username || !password) {
+        alert('Vui lòng điền đầy đủ thông tin!');
+        return;
+      }
+
+      const existingUser = users.find(user => user.username === username);
+      if (existingUser) {
+        alert('Tên người dùng đã tồn tại!');
+        return;
+      }
+
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Đăng ký thành công!');
+      registerModal.style.display = 'none';
+    });
+
+    // Đăng nhập người dùng
     document.getElementById('login-submit').addEventListener('click', () => {
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const user = users.find(u => u.username === username && u.password === password);
-      
+
+      if (!username || !password) {
+        alert('Vui lòng điền đầy đủ thông tin!');
+        return;
+      }
+
+      const user = users.find(user => user.username === username && user.password === password);
       if (user) {
         localStorage.setItem('currentUser', username);
+        alert('Đăng nhập thành công!');
         loginModal.style.display = 'none';
         loginBtn.style.display = 'none';
         registerBtn.style.display = 'none';
         logoutBtn.style.display = 'inline-block';
         profileBtn.style.display = 'inline-block';
       } else {
-        alert('Tên đăng nhập hoặc mật khẩu không chính xác');
-      }
-    });
-
-    document.getElementById('register-submit').addEventListener('click', () => {
-      const username = document.getElementById('register-username').value;
-      const password = document.getElementById('register-password').value;
-      
-      const userExists = users.find(u => u.username === username);
-      if (userExists) {
-        alert('Tài khoản đã tồn tại');
-      } else {
-        users.push({ username, password });
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Đăng ký thành công');
-        registerModal.style.display = 'none';
+        alert('Sai tên người dùng hoặc mật khẩu!');
       }
     });
   </script>
-
 </body>
 </html>
