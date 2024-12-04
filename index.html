@@ -76,14 +76,14 @@
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px 20px; /* Tăng chiều rộng của category */
+      padding: 10px 20px;
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-width: 150px; /* Đảm bảo đủ chỗ để hiển thị tên */
+      min-width: 180px; /* Điều chỉnh để khung viền vừa khít với tên đề mục */
     }
     .category:hover {
       background-color: #0056b3;
@@ -100,7 +100,7 @@
       border: none;
       cursor: pointer;
       padding: 10px;
-      border-radius: 50%; /* Đổi hình bầu dục thành tròn */
+      border-radius: 50%; /* Đổi hình bầu dục thành hình tròn */
     }
 
     .categories-container .left-arrow {
@@ -226,10 +226,10 @@
         width: 100%;
       }
       .category {
-        max-width: none; /* Đảm bảo hiển thị hết tên đề mục */
-        font-size: 1rem; /* Cân chỉnh font size */
-        text-overflow: unset; /* Không dùng dấu ba chấm */
-        white-space: normal; /* Cho phép dòng dài hơn */
+        max-width: none;
+        font-size: 1rem;
+        text-overflow: unset;
+        white-space: normal;
       }
       .categories {
         gap: 15px;
@@ -266,8 +266,10 @@
         <div class="category">Giáo dục</div>
         <div class="category">Y tế</div>
         <div class="category">Tin tức</div>
-        <div class="category">Giải trí</div>
-        <div class="category">Thời trang</div>
+        <div class="category">Mẹo vặt</div>
+        <div class="category">Khoa học - Công nghệ</div>
+        <div class="category">Giải trí - Đố vui</div>
+        <div class="category">Tâm sự (Confession)</div>
       </div>
       <button class="arrow right-arrow">&#8594;</button>
     </div>
@@ -300,80 +302,85 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2>Đăng ký</h2>
-      <input type="text" id="new-username" placeholder="Tên người dùng">
-      <input type="password" id="new-password" placeholder="Mật khẩu">
+      <input type="text" id="register-username" placeholder="Tên người dùng">
+      <input type="password" id="register-password" placeholder="Mật khẩu">
       <button id="register-submit">Đăng ký</button>
     </div>
   </div>
 
   <script>
-    // Lưu trữ trạng thái đăng nhập bằng localStorage
-    document.getElementById("login-btn").addEventListener("click", function() {
-      document.getElementById("login-modal").style.display = "block";
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const profileBtn = document.getElementById('profile-btn');
+    const loginModal = document.getElementById('login-modal');
+    const registerModal = document.getElementById('register-modal');
+    const closeButtons = document.querySelectorAll('.close');
+    let currentUser = localStorage.getItem('currentUser');
+
+    if (currentUser) {
+      loginBtn.style.display = 'none';
+      registerBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+      profileBtn.style.display = 'inline-block';
+    }
+
+    loginBtn.addEventListener('click', () => {
+      loginModal.style.display = 'block';
     });
 
-    document.getElementById("register-btn").addEventListener("click", function() {
-      document.getElementById("register-modal").style.display = "block";
+    registerBtn.addEventListener('click', () => {
+      registerModal.style.display = 'block';
     });
 
-    document.getElementById("logout-btn").addEventListener("click", function() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("username");
-      updateLoginState();
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      logoutBtn.style.display = 'none';
+      profileBtn.style.display = 'none';
+      loginBtn.style.display = 'inline-block';
+      registerBtn.style.display = 'inline-block';
     });
 
-    document.getElementById("login-submit").addEventListener("click", function() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-
-      if (username === "admin" && password === "admin") {
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", username);
-        updateLoginState();
-        document.getElementById("login-modal").style.display = "none";
-      } else {
-        alert("Thông tin đăng nhập không đúng");
-      }
-    });
-
-    document.getElementById("register-submit").addEventListener("click", function() {
-      const newUsername = document.getElementById("new-username").value;
-      const newPassword = document.getElementById("new-password").value;
-      
-      // Đây là nơi bạn xử lý logic đăng ký người dùng mới.
-      alert("Đăng ký thành công");
-      document.getElementById("register-modal").style.display = "none";
-    });
-
-    document.querySelectorAll(".close").forEach(span => {
-      span.addEventListener("click", function() {
-        document.getElementById("login-modal").style.display = "none";
-        document.getElementById("register-modal").style.display = "none";
+    closeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        registerModal.style.display = 'none';
       });
     });
 
-    function updateLoginState() {
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-      const username = localStorage.getItem("username");
-
-      if (isLoggedIn === "true") {
-        document.getElementById("login-btn").style.display = "none";
-        document.getElementById("register-btn").style.display = "none";
-        document.getElementById("logout-btn").style.display = "inline-block";
-        document.getElementById("profile-btn").style.display = "inline-block";
+    document.getElementById('login-submit').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const user = users.find(u => u.username === username && u.password === password);
+      
+      if (user) {
+        localStorage.setItem('currentUser', username);
+        loginModal.style.display = 'none';
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        profileBtn.style.display = 'inline-block';
       } else {
-        document.getElementById("login-btn").style.display = "inline-block";
-        document.getElementById("register-btn").style.display = "inline-block";
-        document.getElementById("logout-btn").style.display = "none";
-        document.getElementById("profile-btn").style.display = "none";
+        alert('Tên đăng nhập hoặc mật khẩu không chính xác');
       }
-    }
+    });
 
-    // Kiểm tra trạng thái đăng nhập khi tải lại trang
-    window.onload = function() {
-      updateLoginState();
-    };
-
+    document.getElementById('register-submit').addEventListener('click', () => {
+      const username = document.getElementById('register-username').value;
+      const password = document.getElementById('register-password').value;
+      
+      const userExists = users.find(u => u.username === username);
+      if (userExists) {
+        alert('Tài khoản đã tồn tại');
+      } else {
+        users.push({ username, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Đăng ký thành công');
+        registerModal.style.display = 'none';
+      }
+    });
   </script>
 
 </body>
