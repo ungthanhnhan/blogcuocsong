@@ -13,14 +13,33 @@
       background-color: #f4f4f9;
     }
     header {
-      background-color: #007bff;
+      background-color: #00bcd4; /* Màu xanh da trời */
       color: white;
       padding: 15px 0;
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     header h1 {
       margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-style: italic;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng shadow */
+      text-transform: capitalize;
+      color: #ff5722; /* Màu cam cho logo */
+      letter-spacing: 2px;
+      padding-left: 15px;
+    }
+    header h1::before {
+      content: '» '; /* Thêm dấu trước logo để làm nổi bật */
       font-size: 2rem;
+      color: #ff5722;
+    }
+    header h1::after {
+      content: ' «'; /* Thêm dấu sau logo */
+      font-size: 2rem;
+      color: #ff5722;
     }
     nav {
       display: flex;
@@ -32,6 +51,7 @@
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
+      text-transform: uppercase;
     }
     .container {
       padding: 20px;
@@ -56,6 +76,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
+      background-color: white; /* Màu nền trắng cho bài viết */
+      padding: 10px;
     }
     .post {
       width: calc(33.33% - 20px);
@@ -121,15 +143,14 @@
 
   <header>
     <h1>BlogCuộcSống</h1>
+    <nav>
+      <div class="login-info">
+        <a href="#" id="login-btn">Đăng nhập</a>
+        <a href="#" id="logout-btn" style="display: none;">Đăng xuất</a>
+        <a href="#" id="profile-btn" style="display: none;">admin</a>
+      </div>
+    </nav>
   </header>
-
-  <nav>
-    <div class="login-info">
-      <a href="#" id="login-btn">Đăng nhập</a>
-      <a href="#" id="logout-btn" style="display: none;">Đăng xuất</a>
-      <a href="#" id="profile-btn" style="display: none;">admin</a>
-    </div>
-  </nav>
 
   <div class="container">
 
