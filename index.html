@@ -269,10 +269,30 @@
     const registerBtn = document.getElementById('register-btn');
     const submitLogin = document.getElementById('submit-login');
     const submitRegister = document.getElementById('submit-register');
+    const logoutBtn = document.getElementById('logout-btn');
+    const profileBtn = document.getElementById('profile-btn');
 
     const users = [
       { username: "admin", password: "Andy@bi1997" }
     ];
+
+    function loadLoginStatus() {
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('register-btn').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'inline-block';
+        document.getElementById('profile-btn').style.display = 'inline-block';
+        document.getElementById('profile-btn').innerText = loggedInUser;
+      } else {
+        document.getElementById('login-btn').style.display = 'inline-block';
+        document.getElementById('register-btn').style.display = 'inline-block';
+        document.getElementById('logout-btn').style.display = 'none';
+        document.getElementById('profile-btn').style.display = 'none';
+      }
+    }
+
+    loadLoginStatus();
 
     loginBtn.onclick = function() {
       loginModal.style.display = "block";
@@ -290,9 +310,8 @@
       if (user) {
         loginModal.style.display = "none";
         alert("Đăng nhập thành công");
-        document.getElementById('profile-btn').style.display = "inline-block";
-        document.getElementById('logout-btn').style.display = "inline-block";
-        document.getElementById('login-btn').style.display = "none";
+        localStorage.setItem('loggedInUser', user.username);
+        loadLoginStatus();
       } else {
         alert("Sai tên đăng nhập hoặc mật khẩu");
       }
@@ -319,10 +338,9 @@
       }
     };
 
-    document.getElementById('logout-btn').onclick = function() {
-      document.getElementById('profile-btn').style.display = "none";
-      document.getElementById('logout-btn').style.display = "none";
-      document.getElementById('login-btn').style.display = "inline-block";
+    logoutBtn.onclick = function() {
+      localStorage.removeItem('loggedInUser');
+      loadLoginStatus();
       alert("Đăng xuất thành công");
     };
   </script>
