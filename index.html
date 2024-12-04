@@ -13,7 +13,7 @@
       background-color: #f4f4f9;
     }
     header {
-      background-color: #00bcd4;
+      background-color: #00bcd4; /* Màu xanh da trời */
       color: white;
       padding: 15px 0;
       display: flex;
@@ -26,9 +26,9 @@
       font-size: 2.5rem;
       font-weight: bold;
       font-style: italic;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng shadow */
       text-transform: capitalize;
-      color: white;
+      color: white; /* Màu trắng cho logo */
       letter-spacing: 2px;
       padding-left: 15px;
     }
@@ -58,65 +58,27 @@
     .container {
       padding: 20px;
     }
-    .categories-container {
-      display: flex;
-      align-items: center;
-      position: relative;
-      margin-bottom: 20px;
-    }
     .categories {
       display: flex;
-      gap: 15px;
-      flex-wrap: nowrap;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      transition: transform 0.3s ease;
+      overflow-x: auto;
+      margin-bottom: 20px;
     }
     .category {
       background-color: #007bff;
       color: white;
-      padding: 10px 20px;
+      padding: 10px;
       margin-right: 15px;
       border-radius: 5px;
       cursor: pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-width: 150px;
-      text-align: center;
     }
     .category:hover {
       background-color: #0056b3;
     }
-
-    /* Mũi tên di chuyển */
-    .categories-container .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-      border-radius: 50%; /* Đổi hình bầu dục thành tròn */
-    }
-
-    .categories-container .left-arrow {
-      left: 0;
-    }
-
-    .categories-container .right-arrow {
-      right: 0;
-    }
-
     .posts {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
-      background-color: white;
+      background-color: white; /* Màu nền trắng cho bài viết */
       padding: 10px;
     }
     .post {
@@ -209,7 +171,6 @@
       cursor: pointer;
     }
 
-    /* Media Queries */
     @media (max-width: 768px) {
       header h1 {
         font-size: 1.8rem;
@@ -225,21 +186,6 @@
       }
       .post {
         width: 100%;
-      }
-      .category {
-        max-width: none;
-        font-size: 1rem;
-        text-overflow: unset;
-        white-space: normal;
-      }
-      .categories {
-        gap: 15px;
-      }
-      .categories-container {
-        overflow-x: auto;
-      }
-      .categories-container .arrow {
-        font-size: 1.5rem;
       }
     }
   </style>
@@ -260,158 +206,143 @@
 
   <div class="container">
     <!-- Categories -->
-    <div class="categories-container">
-      <button class="arrow left-arrow">&#8592;</button>
-      <div class="categories">
-        <div class="category">Sức khoẻ</div>
-        <div class="category">Giáo dục</div>
-        <div class="category">Y tế</div>
-        <div class="category">Tin tức</div>
-        <div class="category">Giải trí</div>
-        <div class="category">Thời trang</div>
-        <div class="category">Mẹo vặt</div>
-        <div class="category">Khoa học - Công nghệ</div>
-        <div class="category">Đố vui</div>
-        <div class="category">Tâm sự</div>
-      </div>
-      <button class="arrow right-arrow">&#8594;</button>
+    <div class="categories">
+      <div class="category">Sức khoẻ</div>
+      <div class="category">Giáo dục</div>
+      <div class="category">Y tế</div>
+      <div class="category">Tin tức</div>
+      <div class="category">Mẹo vặt</div>
+      <div class="category">Khoa học - Công nghệ</div>
+      <div class="category">Giải trí - Đố vui</div>
+      <div class="category">Tâm sự (Confession)</div>
     </div>
+
     <!-- Posts -->
     <div class="posts">
       <div class="post">
-        <img src="https://via.placeholder.com/640x360" alt="Post 1">
+        <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
         <div class="post-content">
-          <h3>Post 1</h3>
-          <p>Đây là mô tả bài viết số 1</p>
-          <span class="btn">Xem thêm</span>
+          <h3>Tiêu đề bài viết 1</h3>
+          <p>Đây là đoạn tóm tắt đầu tiên của bài viết 1. Tóm tắt này sẽ hiển thị đủ các dòng trong một diện tích nhất định.</p>
         </div>
       </div>
-      <!-- Add more posts -->
+
+      <div class="post">
+        <img src="https://via.placeholder.com/1280x720" alt="Thumbnail">
+        <div class="post-content">
+          <h3>Tiêu đề bài viết 2</h3>
+          <p>Đoạn tóm tắt của bài viết 2. Tóm tắt này sẽ ngắn hơn hoặc dài hơn tùy vào diện tích còn lại trong box.</p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Modal Đăng nhập -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-login-modal">&times;</span>
+      <h2>Đăng nhập</h2>
+      <input type="text" id="username" placeholder="Tên đăng nhập">
+      <input type="password" id="password" placeholder="Mật khẩu">
+      <button id="submit-login">Đăng nhập</button>
     </div>
   </div>
 
-  <!-- Modal (for Login/Signup) -->
-  <div class="modal" id="login-modal">
-    <div class="modal-content">
-      <span class="close" id="close-modal">&times;</span>
-      <h3>Đăng nhập</h3>
-      <input type="text" id="login-username" placeholder="Tên tài khoản">
-      <input type="password" id="login-password" placeholder="Mật khẩu">
-      <button id="login-submit">Đăng nhập</button>
-    </div>
-  </div>
-  
-  <div class="modal" id="register-modal">
+  <!-- Modal Đăng ký -->
+  <div id="register-modal" class="modal">
     <div class="modal-content">
       <span class="close" id="close-register-modal">&times;</span>
-      <h3>Đăng ký</h3>
-      <input type="text" id="register-username" placeholder="Tên tài khoản">
-      <input type="password" id="register-password" placeholder="Mật khẩu">
-      <button id="register-submit">Đăng ký</button>
+      <h2>Đăng ký</h2>
+      <input type="text" id="new-username" placeholder="Tên đăng nhập">
+      <input type="password" id="new-password" placeholder="Mật khẩu">
+      <button id="submit-register">Đăng ký</button>
     </div>
   </div>
 
   <script>
-    // JavaScript xử lý đăng nhập, đăng ký và mũi tên
     const loginModal = document.getElementById('login-modal');
     const registerModal = document.getElementById('register-modal');
+    const closeLoginModal = document.getElementById('close-login-modal');
+    const closeRegisterModal = document.getElementById('close-register-modal');
     const loginBtn = document.getElementById('login-btn');
     const registerBtn = document.getElementById('register-btn');
-    const closeModal = document.getElementById('close-modal');
-    const closeRegisterModal = document.getElementById('close-register-modal');
-    const loginSubmit = document.getElementById('login-submit');
-    const registerSubmit = document.getElementById('register-submit');
+    const submitLogin = document.getElementById('submit-login');
+    const submitRegister = document.getElementById('submit-register');
     const logoutBtn = document.getElementById('logout-btn');
     const profileBtn = document.getElementById('profile-btn');
-    const categories = document.querySelector('.categories');
-    const leftArrow = document.querySelector('.left-arrow');
-    const rightArrow = document.querySelector('.right-arrow');
 
-    let currentUser = localStorage.getItem('username');
+    const users = [
+      { username: "admin", password: "Andy@bi1997" }
+    ];
 
-    if (currentUser) {
-      loginBtn.style.display = 'none';
-      registerBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline';
-      profileBtn.style.display = 'inline';
-      profileBtn.textContent = currentUser;
-    } else {
-      loginBtn.style.display = 'inline';
-      registerBtn.style.display = 'inline';
-      logoutBtn.style.display = 'none';
-      profileBtn.style.display = 'none';
+    function loadLoginStatus() {
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('register-btn').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'inline-block';
+        document.getElementById('profile-btn').style.display = 'inline-block';
+        document.getElementById('profile-btn').innerText = loggedInUser;
+      } else {
+        document.getElementById('login-btn').style.display = 'inline-block';
+        document.getElementById('register-btn').style.display = 'inline-block';
+        document.getElementById('logout-btn').style.display = 'none';
+        document.getElementById('profile-btn').style.display = 'none';
+      }
     }
 
-    // Show Login Modal
-    loginBtn.onclick = () => {
-      loginModal.style.display = 'block';
-    };
-    
-    // Show Register Modal
-    registerBtn.onclick = () => {
-      registerModal.style.display = 'block';
+    loadLoginStatus();
+
+    loginBtn.onclick = function() {
+      loginModal.style.display = "block";
     };
 
-    // Close Modal
-    closeModal.onclick = () => {
-      loginModal.style.display = 'none';
+    closeLoginModal.onclick = function() {
+      loginModal.style.display = "none";
     };
 
-    closeRegisterModal.onclick = () => {
-      registerModal.style.display = 'none';
-    };
+    submitLogin.onclick = function() {
+      const username = document.getElementById('username').value.toLowerCase(); // Không phân biệt viết hoa
+      const password = document.getElementById('password').value;
+      const user = users.find(user => user.username.toLowerCase() === username && user.password === password);
 
-    // Login Submit
-    loginSubmit.onclick = () => {
-      const username = document.getElementById('login-username').value;
-      const password = document.getElementById('login-password').value;
-      if (username && password) {
-        localStorage.setItem('username', username);
-        currentUser = username;
-        loginModal.style.display = 'none';
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline';
-        profileBtn.style.display = 'inline';
-        profileBtn.textContent = currentUser;
+      if (user) {
+        loginModal.style.display = "none";
+        alert("Đăng nhập thành công");
+        localStorage.setItem('loggedInUser', user.username);
+        loadLoginStatus();
+      } else {
+        alert("Sai tên đăng nhập hoặc mật khẩu");
       }
     };
 
-    // Register Submit
-    registerSubmit.onclick = () => {
-      const username = document.getElementById('register-username').value;
-      const password = document.getElementById('register-password').value;
-      if (username && password) {
-        localStorage.setItem('username', username);
-        currentUser = username;
-        registerModal.style.display = 'none';
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline';
-        profileBtn.style.display = 'inline';
-        profileBtn.textContent = currentUser;
+    registerBtn.onclick = function() {
+      registerModal.style.display = "block";
+    };
+
+    closeRegisterModal.onclick = function() {
+      registerModal.style.display = "none";
+    };
+
+    submitRegister.onclick = function() {
+      const newUsername = document.getElementById('new-username').value.toLowerCase(); // Không phân biệt viết hoa
+      const newPassword = document.getElementById('new-password').value;
+
+      if (users.some(user => user.username.toLowerCase() === newUsername)) {
+        alert("Tên đăng nhập đã tồn tại");
+      } else {
+        users.push({ username: newUsername, password: newPassword });
+        alert("Đăng ký thành công");
+        registerModal.style.display = "none";
       }
     };
 
-    // Logout
-    logoutBtn.onclick = () => {
-      localStorage.removeItem('username');
-      currentUser = null;
-      loginBtn.style.display = 'inline';
-      registerBtn.style.display = 'inline';
-      logoutBtn.style.display = 'none';
-      profileBtn.style.display = 'none';
-    };
-
-    // Mũi tên di chuyển
-    leftArrow.onclick = () => {
-      categories.style.transform = 'translateX(200px)';
-    };
-
-    rightArrow.onclick = () => {
-      categories.style.transform = 'translateX(-200px)';
+    logoutBtn.onclick = function() {
+      localStorage.removeItem('loggedInUser');
+      loadLoginStatus();
+      alert("Đăng xuất thành công");
     };
   </script>
-
 </body>
 </html>
